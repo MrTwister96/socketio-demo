@@ -2,7 +2,7 @@ let socket = null;
 
 const connectToSocketIoServer = () => {
     // Connect to Socket.io Server
-    const socket = io("/");
+    socket = io("/");
 
     // connect event Emitted from server upon successful connection
     socket.on("connect", () => {
@@ -16,4 +16,13 @@ const connectToSocketIoServer = () => {
     });
 };
 
-export default { connectToSocketIoServer };
+const sendGroupChatMessage = (author, messageContent) => {
+    const messageData = {
+        author,
+        messageContent,
+    };
+
+    socket.emit("group-chat-message", messageData);
+};
+
+export default { connectToSocketIoServer, sendGroupChatMessage };

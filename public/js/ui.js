@@ -1,5 +1,6 @@
 import { getChatbox } from "./elements.js";
 import store from "./store.js";
+import socketHandler from "./socketHandler.js";
 
 export const goToChatPage = () => {
     if (store.getUsername() !== "") {
@@ -47,13 +48,12 @@ const createGroupChatbox = () => {
         if (key === "Enter") {
             const author = store.getUsername();
             const messageContent = event.target.value;
-            // Send message to socket.io server
+
+            // Make sure the input is not empty or starts with space
             if (messageContent !== "" && !messageContent.startsWith(" ")) {
+                // Send to socket.io server
+                socketHandler.sendGroupChatMessage(author, messageContent);
                 newMessageInput.value = "";
-                console.log({
-                    author,
-                    messageContent,
-                });
             } else {
                 newMessageInput.value = "";
                 alert("Enter valid message!");
