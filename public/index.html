@@ -4,10 +4,27 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Whatsdown</title>
+        <link rel="stylesheet" href="./css/style.css" />
+        <title>Chat App</title>
     </head>
     <body>
-        Hello World From Client
+        <div class="main_container">
+            <div class="introduction_page">
+                <div class="introduction_page_box">
+                    <input
+                        type="text"
+                        class="introduction_page_name_input"
+                        placeholder="Enter your name..."
+                    />
+                    <button
+                        class="introduction_page_enter_chat_button"
+                        id="enter_chats_button"
+                    >
+                        Enter chat page
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <script src="/socket.io/socket.io.js"></script>
         <script type="module" src="./js/main.js"></script>
