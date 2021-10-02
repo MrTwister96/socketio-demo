@@ -34,6 +34,14 @@ io.on("connection", (socket) => {
     //Log successfull connections
     console.log(`CLIENT CONNECTED: SOCKETID: ${socket.id}`);
 
+    // Emit hello-client to server
+    socket.emit("hello-client");
+
+    // On hello-server emiited from client
+    socket.on("hello-server", () => {
+        console.log(`CLIENT EMITTED: hello-server. SOCKETID: ${socket.id}`);
+    });
+
     // Socket.io Disconnection
     socket.on("disconnect", (reason) => {
         console.log(
