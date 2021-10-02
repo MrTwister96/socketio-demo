@@ -1,29 +1,13 @@
 // Imports
 import store from "./store.js";
 import { goToChatPage } from "./ui.js";
-
-// Connect to Socket.io Server
-const socket = io("/");
-
-// connect event Emitted from server upon successful connection
-socket.on("connect", () => {
-    console.log(`CONNECTED TO SERVER. SOCKETID: ${socket.id}`);
-});
-
-// hello-client event emmited by server
-socket.on("hello-client", () => {
-    console.log(`SERVER EMITTED: hello-client. SOCKETID: ${socket.id}`);
-    socket.emit("hello-server");
-});
+import socketHandler from "./socketHandler.js";
 
 // name input element
 const nameInput = document.querySelector(".introduction_page_name_input");
 
 nameInput.addEventListener("keyup", (event) => {
-    const username = store.getUsername();
-    const key = event.key;
-
-    if (username === "" && key === " ") {
+    if (store.getUsername() === "" && event.key === " ") {
         nameInput.value = "";
     } else {
         store.setUsername(event.target.value);
@@ -35,4 +19,5 @@ const chatPageButton = document.getElementById("enter_chats_button");
 
 chatPageButton.addEventListener("click", () => {
     goToChatPage();
+    socketHandler.connectToSocketIoServer();
 });
