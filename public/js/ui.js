@@ -1,3 +1,4 @@
+import { getChatbox } from "./elements.js";
 import store from "./store.js";
 
 export const goToChatPage = () => {
@@ -14,6 +15,26 @@ export const goToChatPage = () => {
 
     const username = store.getUsername();
     updateUsername(username);
+
+    createGroupChatbox();
+};
+
+const chatboxId = "group-chat-chatbox";
+const chatboxMessagesId = "group-chat-messages";
+const chatboxInputId = "group-chat-input";
+
+const createGroupChatbox = () => {
+    const data = {
+        chatboxLabel: "Group Chat",
+        chatboxMessagesId,
+        chatboxInputId,
+        chatboxId,
+    };
+
+    const chatbox = getChatbox(data);
+
+    const chatboxesContainer = document.querySelector(".chatboxes_container");
+    chatboxesContainer.appendChild(chatbox);
 };
 
 const updateUsername = (username) => {
