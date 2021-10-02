@@ -20,7 +20,14 @@ socket.on("hello-client", () => {
 const nameInput = document.querySelector(".introduction_page_name_input");
 
 nameInput.addEventListener("keyup", (event) => {
-    store.setUsername(event.target.value);
+    const username = store.getUsername();
+    const key = event.key;
+
+    if (username === "" && key === " ") {
+        nameInput.value = "";
+    } else {
+        store.setUsername(event.target.value);
+    }
 });
 
 // enter chats button element

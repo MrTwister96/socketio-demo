@@ -1,4 +1,4 @@
-let username;
+let username = "";
 
 const getUsername = () => {
     return username;
