@@ -42,6 +42,18 @@ io.on("connection", (socket) => {
         console.log(`CLIENT EMITTED: hello-server. SOCKETID: ${socket.id}`);
     });
 
+    socket.on("group-chat-message", (messageData) => {
+        console.log(
+            `CLIENT SENT GROUP MESSAGE. AUTHOR: ${messageData.author}. MESSAGE: ${messageData.messageContent}`
+        );
+
+        // Broadcast to all except the sender
+        // socket.broadcast.emit("group-chat-message", messageData);
+
+        // Emit to all connected users
+        io.emit("group-chat-message", messageData);
+    });
+
     // Socket.io Disconnection
     socket.on("disconnect", (reason) => {
         console.log(

@@ -23,11 +23,13 @@ export const getChatbox = ({
 
 export const getGroupChatMessage = ({ author, messageContent }) => {
     const messageContainer = document.createElement("div");
-    messageContent.classList.add("message_container");
+    messageContainer.classList.add("message_container");
 
     messageContainer.innerHTML = `
         <p class="message_paragraph">
             <span class="message_author">${author}: </span>${messageContent}
         </p>
     `;
+
+    return messageContainer;
 };

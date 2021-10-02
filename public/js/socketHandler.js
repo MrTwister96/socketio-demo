@@ -1,3 +1,5 @@
+import { appendGroupChatMessage } from "./ui.js";
+
 let socket = null;
 
 const connectToSocketIoServer = () => {
@@ -13,6 +15,10 @@ const connectToSocketIoServer = () => {
     socket.on("hello-client", () => {
         console.log(`SERVER EMITTED: hello-client. SOCKETID: ${socket.id}`);
         socket.emit("hello-server");
+    });
+
+    socket.on("group-chat-message", (messageData) => {
+        appendGroupChatMessage(messageData);
     });
 };
 

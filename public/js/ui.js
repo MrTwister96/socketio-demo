@@ -1,4 +1,4 @@
-import { getChatbox } from "./elements.js";
+import { getChatbox, getGroupChatMessage } from "./elements.js";
 import store from "./store.js";
 import socketHandler from "./socketHandler.js";
 
@@ -60,6 +60,15 @@ const createGroupChatbox = () => {
             }
         }
     });
+};
+
+export const appendGroupChatMessage = (messageData) => {
+    const groupChatboxMessagesContainer =
+        document.getElementById(chatboxMessagesId);
+
+    const chatMessage = getGroupChatMessage(messageData);
+
+    groupChatboxMessagesContainer.appendChild(chatMessage);
 };
 
 const updateUsername = (username) => {
