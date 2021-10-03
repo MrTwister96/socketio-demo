@@ -1,6 +1,6 @@
 // Imports
 import store from "./store.js";
-import { goToChatPage } from "./ui.js";
+import ui from "./ui.js";
 import socketHandler from "./socketHandler.js";
 
 // name input element
@@ -18,6 +18,6 @@ nameInput.addEventListener("keyup", (event) => {
 const chatPageButton = document.getElementById("enter_chats_button");
 
 chatPageButton.addEventListener("click", () => {
-    goToChatPage();
+    ui.goToChatPage();
     socketHandler.connectToSocketIoServer();
 });

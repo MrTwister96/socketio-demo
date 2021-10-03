@@ -1,5 +1,5 @@
 import store from "./store.js";
-import { appendGroupChatMessage } from "./ui.js";
+import ui from "./ui.js";
 
 let socket = null;
 
@@ -12,8 +12,12 @@ const connectToSocketIoServer = () => {
         console.log(`${socket.id} CONNECTED TO SERVER.`);
     });
 
+    socket.on("active-peers", ({ connectedPeers }) => {
+        ui.updateActiveChatboxes(connectedPeers);
+    });
+
     socket.on("group-chat-message", (messageData) => {
-        appendGroupChatMessage(messageData);
+        ui.appendGroupChatMessage(messageData);
     });
 };
 

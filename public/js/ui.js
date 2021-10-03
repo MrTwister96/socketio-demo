@@ -2,7 +2,7 @@ import { getChatbox, getGroupChatMessage } from "./elements.js";
 import store from "./store.js";
 import socketHandler from "./socketHandler.js";
 
-export const goToChatPage = () => {
+const goToChatPage = () => {
     if (store.getUsername() !== "") {
         // Get page elements
         const introductionPage = document.querySelector(".introduction_page");
@@ -62,7 +62,7 @@ const createGroupChatbox = () => {
     });
 };
 
-export const appendGroupChatMessage = (messageData) => {
+const appendGroupChatMessage = (messageData) => {
     const groupChatboxMessagesContainer =
         document.getElementById(chatboxMessagesId);
 
@@ -75,3 +75,29 @@ const updateUsername = (username) => {
     const usernameLabel = document.querySelector(".username_label");
     usernameLabel.innerHTML = username;
 };
+
+const updateActiveChatboxes = (connectedPeers) => {
+    connectedPeers.forEach((peer) => {
+        createNewUserChatbox(peer);
+    });
+};
+
+const createNewUserChatbox = (peer) => {
+    const chatboxId = peer.socketId;
+    const chatboxMessagesId = `${peer.socketId}-messages`;
+    const chatboxInputId = `${peer.socketId}-input`;
+
+    const data = {
+        chatboxId,
+        chatboxMessagesId,
+        chatboxInputId,
+        chatboxLabel: peer.username,
+    };
+
+    const chatbox = getChatbox(data);
+    //Append new chatbox to DOM
+    const chatboxesContainer = document.querySelector(".chatboxes_container");
+    chatboxesContainer.appendChild(chatbox);
+};
+
+export default { goToChatPage, appendGroupChatMessage, updateActiveChatboxes };
