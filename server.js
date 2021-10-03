@@ -17,6 +17,7 @@ let connectedPeers = [];
 io.on("connection", (socket) => {
     socket.on("register-new-user", ({ username }) => {
         connectedPeers = [...connectedPeers, { username, socketId: socket.id }];
+        broadcastConnectedPeers();
         console.log(`${socket.id} CONNECTED`);
     });
 
@@ -26,9 +27,14 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", (reason) => {
         connectedPeers = connectedPeers.filter((p) => p.socketId !== socket.id);
+        broadcastConnectedPeers();
         console.log(`${socket.id} DISCONNECTED. REASON: ${reason}`);
     });
 });
+
+const broadcastConnectedPeers = () => {
+    io.emit("active-peers", { connectedPeers });
+};
 
 // Start HTTP Server
 const PORT = process.env.EXPRESS_PORT || 5000;
