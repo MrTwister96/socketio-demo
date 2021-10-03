@@ -1,20 +1,14 @@
+import store from "./store.js";
 import { appendGroupChatMessage } from "./ui.js";
 
 let socket = null;
 
 const connectToSocketIoServer = () => {
-    // Connect to Socket.io Server
     socket = io("/");
 
-    // connect event Emitted from server upon successful connection
     socket.on("connect", () => {
-        console.log(`CONNECTED TO SERVER. SOCKETID: ${socket.id}`);
-    });
-
-    // hello-client event emmited by server
-    socket.on("hello-client", () => {
-        console.log(`SERVER EMITTED: hello-client. SOCKETID: ${socket.id}`);
-        socket.emit("hello-server");
+        registerActiveSession();
+        console.log(`${socket.id} CONNECTED TO SERVER.`);
     });
 
     socket.on("group-chat-message", (messageData) => {
@@ -22,13 +16,12 @@ const connectToSocketIoServer = () => {
     });
 };
 
-const sendGroupChatMessage = (author, messageContent) => {
-    const messageData = {
-        author,
-        messageContent,
-    };
+const registerActiveSession = () => {
+    socket.emit("register-new-user", { username: store.getUsername() });
+};
 
-    socket.emit("group-chat-message", messageData);
+const sendGroupChatMessage = (author, messageContent) => {
+    socket.emit("group-chat-message", { author, messageContent });
 };
 
 export default { connectToSocketIoServer, sendGroupChatMessage };

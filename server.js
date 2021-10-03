@@ -29,36 +29,22 @@ app.get("/", (req, res) => {
 // Initialize Socket.io server
 const io = new Server(server);
 
+let connectedPeers = [];
+
 // Handle Incomming Socket.Io Connections
 io.on("connection", (socket) => {
-    //Log successfull connections
-    console.log(`CLIENT CONNECTED: SOCKETID: ${socket.id}`);
-
-    // Emit hello-client to server
-    socket.emit("hello-client");
-
-    // On hello-server emiited from client
-    socket.on("hello-server", () => {
-        console.log(`CLIENT EMITTED: hello-server. SOCKETID: ${socket.id}`);
+    socket.on("register-new-user", ({ username }) => {
+        connectedPeers = [...connectedPeers, { username, socketId: socket.id }];
+        console.log(`${socket.id} CONNECTED`);
     });
 
     socket.on("group-chat-message", (messageData) => {
-        console.log(
-            `CLIENT SENT GROUP MESSAGE. AUTHOR: ${messageData.author}. MESSAGE: ${messageData.messageContent}`
-        );
-
-        // Broadcast to all except the sender
-        // socket.broadcast.emit("group-chat-message", messageData);
-
-        // Emit to all connected users
         io.emit("group-chat-message", messageData);
     });
 
-    // Socket.io Disconnection
     socket.on("disconnect", (reason) => {
-        console.log(
-            `CLIENT DISCONNECTED. REASON: ${reason} SOCKETID: ${socket.id}`
-        );
+        connectedPeers = connectedPeers.filter((p) => p.socketId !== socket.id);
+        console.log(`${socket.id} DISCONNECTED. REASON: ${reason}`);
     });
 });
 
