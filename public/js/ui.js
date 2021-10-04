@@ -78,7 +78,13 @@ const updateUsername = (username) => {
 
 const updateActiveChatboxes = (connectedPeers) => {
     connectedPeers.forEach((peer) => {
-        createNewUserChatbox(peer);
+        const activeChatboxes = store.getActiveChatboxes();
+        const activeChatbox = activeChatboxes.find(
+            (c) => peer.socketId === c.socketId
+        );
+        if (!activeChatbox && peer.socketId !== store.getSocketId()) {
+            createNewUserChatbox(peer);
+        }
     });
 };
 
@@ -98,6 +104,31 @@ const createNewUserChatbox = (peer) => {
     //Append new chatbox to DOM
     const chatboxesContainer = document.querySelector(".chatboxes_container");
     chatboxesContainer.appendChild(chatbox);
+
+    const newMessageInput = document.getElementById(chatboxInputId);
+    newMessageInput.addEventListener("keyup", (event) => {
+        const key = event.key;
+
+        if (key === "Enter") {
+            const author = store.getUsername();
+            const messageContent = event.target.value;
+
+            // Make sure the input is not empty or starts with space
+            if (messageContent !== "" && !messageContent.startsWith(" ")) {
+                // Send to socket.io server
+                socketHandler.sendGroupChatMessage(author, messageContent);
+                newMessageInput.value = "";
+            } else {
+                newMessageInput.value = "";
+                alert("Enter valid message!");
+            }
+        }
+    });
+
+    // push to active chatboxed new user chatbox
+    const activeChatboxes = store.getActiveChatboxes();
+    const newActiveChatboxes = [...activeChatboxes, peer];
+    store.setActiveChatboxes(newActiveChatboxes);
 };
 
 export default { goToChatPage, appendGroupChatMessage, updateActiveChatboxes };

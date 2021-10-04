@@ -14,16 +14,16 @@ const getSocketId = () => {
     return socketId;
 };
 
-const setSocketId = (socketId) => {
-    socketId = socketId;
+const setSocketId = (id) => {
+    socketId = id;
 };
 
 const getActiveChatboxes = () => {
     return activeChatboxes;
 };
 
-const setActiveChatboxes = (activeChatboxes) => {
-    activeChatboxes = activeChatboxes;
+const setActiveChatboxes = (chatboxes) => {
+    activeChatboxes = chatboxes;
 };
 
 export default {

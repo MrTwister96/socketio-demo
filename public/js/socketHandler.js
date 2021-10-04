@@ -9,6 +9,7 @@ const connectToSocketIoServer = () => {
 
     socket.on("connect", () => {
         registerActiveSession();
+        store.setSocketId(socket.id);
         console.log(`${socket.id} CONNECTED TO SERVER.`);
     });
 
