@@ -24,6 +24,10 @@ const connectToSocketIoServer = () => {
     socket.on("direct-chat-message", (messageData) => {
         ui.appendDirectChatMessage(messageData);
     });
+
+    socket.on("user-disconnected", (socketId) => {
+        ui.removeDisconnectedUser(socketId);
+    });
 };
 
 const sendGroupChatMessage = (author, messageContent) => {

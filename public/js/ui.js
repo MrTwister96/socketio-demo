@@ -152,9 +152,23 @@ const appendDirectChatMessage = (messageData) => {
     directChatboxMessagesContainer.appendChild(chatMessage);
 };
 
+const removeDisconnectedUser = (socketId) => {
+    const activeChatboxes = store.getActiveChatboxes();
+    const newActiveChatboxes = activeChatboxes.filter(
+        (c) => c.socketId !== socketId
+    );
+    store.setActiveChatboxes(newActiveChatboxes);
+
+    const chatbox = document.getElementById(socketId);
+    if (chatbox) {
+        chatbox.parentElement.removeChild(chatbox);
+    }
+};
+
 export default {
     goToChatPage,
     appendGroupChatMessage,
     updateActiveChatboxes,
     appendDirectChatMessage,
+    removeDisconnectedUser,
 };

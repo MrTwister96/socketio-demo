@@ -51,7 +51,8 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", (reason) => {
         connectedPeers = connectedPeers.filter((p) => p.socketId !== socket.id);
-        broadcastConnectedPeers();
+        // broadcastConnectedPeers();
+        io.emit("user-disconnected", socket.id);
         console.log(`${socket.id} DISCONNECTED. REASON: ${reason}`);
     });
 });
