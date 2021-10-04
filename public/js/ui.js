@@ -1,4 +1,8 @@
-import { getChatbox, getGroupChatMessage } from "./elements.js";
+import {
+    getChatbox,
+    getDirectChatMessage,
+    getGroupChatMessage,
+} from "./elements.js";
 import store from "./store.js";
 import socketHandler from "./socketHandler.js";
 
@@ -116,7 +120,11 @@ const createNewUserChatbox = (peer) => {
             // Make sure the input is not empty or starts with space
             if (messageContent !== "" && !messageContent.startsWith(" ")) {
                 // Send to socket.io server
-                socketHandler.sendGroupChatMessage(author, messageContent);
+                socketHandler.sendDirectChatMessage(
+                    peer.socketId,
+                    author,
+                    messageContent
+                );
                 newMessageInput.value = "";
             } else {
                 newMessageInput.value = "";
@@ -125,10 +133,28 @@ const createNewUserChatbox = (peer) => {
         }
     });
 
-    // push to active chatboxed new user chatbox
     const activeChatboxes = store.getActiveChatboxes();
     const newActiveChatboxes = [...activeChatboxes, peer];
     store.setActiveChatboxes(newActiveChatboxes);
 };
 
-export default { goToChatPage, appendGroupChatMessage, updateActiveChatboxes };
+const appendDirectChatMessage = (messageData) => {
+    const { senderId, receiverId, messageContent, isAuthor } = messageData;
+
+    const containerId = isAuthor
+        ? `${receiverId}-messages`
+        : `${senderId}-messages`;
+
+    const alignRight = isAuthor ? true : false;
+
+    const directChatboxMessagesContainer = document.getElementById(containerId);
+    const chatMessage = getDirectChatMessage({ alignRight, messageContent });
+    directChatboxMessagesContainer.appendChild(chatMessage);
+};
+
+export default {
+    goToChatPage,
+    appendGroupChatMessage,
+    updateActiveChatboxes,
+    appendDirectChatMessage,
+};

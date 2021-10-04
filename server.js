@@ -25,6 +25,30 @@ io.on("connection", (socket) => {
         io.emit("group-chat-message", messageData);
     });
 
+    socket.on("direct-chat-message", (messageData) => {
+        const { socketId, author, messageContent } = messageData;
+
+        const connectedPeer = connectedPeers.find(
+            (p) => p.socketId === socketId
+        );
+
+        if (connectedPeer) {
+            const newMessageData = {
+                senderId: socket.id,
+                receiverId: socketId,
+                author,
+                messageContent,
+                isAuthor: false,
+            };
+            io.to(socketId).emit("direct-chat-message", newMessageData);
+            const newMessageDataAuthor = {
+                ...newMessageData,
+                isAuthor: true,
+            };
+            socket.emit("direct-chat-message", newMessageDataAuthor);
+        }
+    });
+
     socket.on("disconnect", (reason) => {
         connectedPeers = connectedPeers.filter((p) => p.socketId !== socket.id);
         broadcastConnectedPeers();
